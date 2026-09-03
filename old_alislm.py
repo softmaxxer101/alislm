@@ -1,3 +1,11 @@
+import time
+start = time.time()
+
+
+
+
+
+
 """Tiny chat LM: raw PyTorch training/inference, designed for a 4 GB RTX 2050."""
 import math
 from types import SimpleNamespace
@@ -17,7 +25,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 def Cfg(vocab=32000, dim=512, layers=10, heads=8, ff=1408, max_seq_len=1024, dropout=0.0):
-    # [FUNCTIONAL DATA] was @dataclass class; now a plain factory returning a
+    # [FUNCTIONAL DATA] was @dataclass; now a plain factory returning a
     # SimpleNamespace struct with no methods — just data, passed explicitly to functions.
     return SimpleNamespace(vocab=vocab, dim=dim, layers=layers, heads=heads, ff=ff, max_seq_len=max_seq_len, dropout=dropout)
 
@@ -204,7 +212,7 @@ def model_generate(model, ids, max_new=80, temperature=0.8, top_k=40):
     return ids
 
 
-def train_one_epoch(model, tokenizer, steps=300, batch=2, seq=512, lr=3e-4):
+def train_one_epoch(model, tokenizer, steps=300, batch=2, seq=512, lr=0.1):
     # This is a deliberately small training smoke test, not a full pre-training run.
     # [BOILERPLATE] SmolTalk provides conversational text; a small bounded  slice
     # keeps this smoke-training run feasible on a 4 GB card.
@@ -246,6 +254,15 @@ if __name__ == "__main__":
     print(f"parameters: {sum(p.numel() for p in model_parameters(model)) / 1e6:.1f}M on {DEVICE}")
     # [AUTOMATION] Replace steps with a checkpointed scheduler and save every N
     # steps for unattended overnight training; this dummy run intentionally stays small.
-    train_one_epoch(model, tokenizer, steps=300)
+    train_one_epoch(model, tokenizer, steps=2000)
     prompt = tokenizer("User: 1+1 \nAssistant:", return_tensors="pt").input_ids.to(DEVICE)
     print(tokenizer.decode(model_generate(model, prompt)[0], skip_special_tokens=True))
+
+
+
+
+
+
+
+end = time.time()
+print(end - start)
