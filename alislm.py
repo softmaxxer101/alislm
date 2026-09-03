@@ -206,7 +206,7 @@ def model_generate(model, ids, max_new=80, temperature=0.8, top_k=40):
 
 def train_one_epoch(model, tokenizer, steps=300, batch=2, seq=512, lr=3e-4):
     # This is a deliberately small training smoke test, not a full pre-training run.
-    # [BOILERPLATE] SmolTalk provides conversational text; a small bounded slice
+    # [BOILERPLATE] SmolTalk provides conversational text; a small bounded  slice
     # keeps this smoke-training run feasible on a 4 GB card.
     ds = load_dataset("HuggingFaceTB/smoltalk", "all", split="train", streaming=True)
     opt = AdamW(model_parameters(model), lr=lr, weight_decay=0.1)
